@@ -1,0 +1,37 @@
+<h2>Topics for <%= @forum.title %> forum</h2>
+
+<table class="tableB">
+  <thead>
+    <tr>
+      <th scope="col">title</th>
+      <th scope="col">posts</th>
+      <th scope="col">last post</th>
+      <th scope="col">rating</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td colspan="4" class="info_results">
+        <span class="info_items"><%= page_entries_info @topics %></span>
+        <span class="pages_navigation right">
+          <%= will_paginate @topics, :container => false %>
+        </span>
+      </td>
+    </tr>
+  </tfoot>
+  <tbody>
+  <% @topics.each do |topic| %>
+    <tr<%= cycle(' class="pair"','') -%>>
+       <td><%= link_to topic.title, topic_path(:id => topic) %></td>
+       <td><%= topic.posts.size %></td>
+       <td><%= topic.updated_at.to_formatted_s(:db) %></td>
+       <td><%= "rating" %></td>
+    </tr>
+  <%end%>
+  <% if @topics.blank? %>
+    <tr>
+       <td colspan="4">No topics.</td>
+    </tr>
+  <% end %>
+  <tbody>
+</table>

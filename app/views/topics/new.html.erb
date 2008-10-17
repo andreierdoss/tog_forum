@@ -1,0 +1,16 @@
+<div class="titleB"><%= link_to "TogForum", member_forums_path %> / Compose a new forum</div>
+<br/>
+<%= error_messages_for :forum %>
+<% form_for :forum, :url => member_forums_path  do |f| %>
+  <fieldset>
+    <div class="fields">
+      <p>
+        <label for="title">Title</label>
+        <%= f.text_field :title, :class => "fieldbox wide" %>
+      </p>
+    </div>
+  </fieldset>
+  <div class="actions">
+    <%= submit_tag 'Save forum', :class => "button mainaction" %>
+  </div>
+<% end %>
