@@ -23,11 +23,6 @@ Plugin requirements
 Install
 -------
 
-If you used the command <code>togify</code> to install tog, then you already have tog_user installed.
-
-If not, install it like any other plugin:
-
-  
 * Install plugin form source:
 
 <pre>
@@ -41,38 +36,17 @@ ruby script/plugin install git@github.com:jacqui/tog_forum.git
 ruby script/generate migration install_tog_forum
 </pre>
 
+
 	  with the following content:
 
 <pre>
 class InstallTogForum < ActiveRecord::Migration
   def self.up
-    create_table :forums do |t|
-      t.string   :title
-      t.timestamps
-    end
-
-    create_table :topics do |t|
-      t.integer  :forum_id
-      t.integer  :user_id
-      t.text     :title
-      t.datetime :last_post_at
-      t.integer  :last_post_by
-      t.timestamps
-    end
-
-    create_table :posts do |t|
-      t.integer  :topic_id
-      t.integer  :user_id
-      t.text     :body
-      t.timestamps
-    end
-
+    migrate_plugin "tog_forum", 1
   end
 
   def self.down
-    drop_table :forums
-    drop_table :topics
-    drop_table :posts
+    migrate_plugin "tog_forum", 0
   end
 end
 </pre>
@@ -92,7 +66,7 @@ rake db:migrate
 More
 -------
 
-[http://github.com/tog/tog_user](http://github.com/tog/tog_user)
+[http://github.com/jacqui/tog_forum](http://github.com/jacqui/tog_forum)
 
 
 Copyright (c) 2008 Jacqui Maher, released under the MIT license
