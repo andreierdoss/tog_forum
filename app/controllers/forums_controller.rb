@@ -42,7 +42,7 @@ class ForumsController < ApplicationController
   end
   
   def create
-    @forum = Forum.build(params[:forum])
+    @forum = Forum.new(params[:forum])
  
     respond_to do |format|
       if @forum.save

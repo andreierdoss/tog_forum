@@ -1,2 +1,40 @@
 <div class="titleB"><%=h @forum.title %></div>
+<%= link_to "add a topic", new_forum_topic_url(@forum) %>
 <br />
+<table class="tableB">
+  <thead>
+    <tr>
+      <th scope="col">Topic</th>
+      <th scope="col">#</th>
+      <th scope="col">Author</th>
+      <th scope="col">Last Post</th>
+      <th scope="col">Rating</th>
+    </tr>
+  </thead>
+  <% if @topics.blank? %>
+    <tr>
+       <td colspan="4">No topics found!</td>
+    </tr>
+  <% else %>
+    <tfoot>
+      <tr>
+        <td colspan="4" class="info_results">
+          <span class="info_items"><%= page_entries_info @topics %></span>
+          <span class="pages_navigation right">
+            <%= will_paginate @topics, :container => false %>
+          </span>
+        </td>
+      </tr>
+    </tfoot>
+    <tbody>
+    <% @topics.each do |topic| %>
+      <tr<%= cycle(' class="pair"','') -%>>
+         <td><%= link_to topic.title, topic_path(:id => topic) %></td>
+         <td><%= topic.posts.size %></td>
+         <td><%= topic.updated_at.to_formatted_s(:db) %></td>
+         <td><%= "rating" %></td>
+      </tr>
+    <%end%>
+  <% end %>
+  <tbody>
+</table>

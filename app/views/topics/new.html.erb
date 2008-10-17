@@ -1,16 +1,23 @@
-<div class="titleB"><%= link_to "TogForum", member_forums_path %> / Compose a new forum</div>
+<div class="titleB"><%= link_to config["plugins.tog_forum.header"], forums_url %> / Add a topic</div>
 <br/>
-<%= error_messages_for :forum %>
-<% form_for :forum, :url => member_forums_path  do |f| %>
+<%= error_messages_for :topic %>
+<% form_for :topic, :url => forum_topics_url(@forum)  do |f| %>
   <fieldset>
     <div class="fields">
       <p>
         <label for="title">Title</label>
         <%= f.text_field :title, :class => "fieldbox wide" %>
       </p>
+      
+      <% fields_for @topic.posts.build do |p| %>
+        <p>
+          <label for="title">Body</label>
+          <%= p.text_area :body, :class => "fieldbox wide" %>
+        </p>
+      <% end %>
     </div>
   </fieldset>
   <div class="actions">
-    <%= submit_tag 'Save forum', :class => "button mainaction" %>
+    <%= submit_tag 'Save topic', :class => "button mainaction" %>
   </div>
 <% end %>

@@ -37,7 +37,8 @@ class TopicsController < ApplicationController
 
   def new
     @topic = @forum.topics.build(:user => current_user)
- 
+    @post = @topic.posts.build(:user => current_user)
+    
     respond_to do |format|
       format.html
       format.xml { render :xml => @topic }
@@ -45,18 +46,28 @@ class TopicsController < ApplicationController
   end
     
   def create
-    @topic = @forum.topic.build(params[:topic])
-
-     respond_to do |format|
-       if @topic.new_record?
-         format.html { render :action => "new" }
-         format.xml { render :xml => @topic.errors, :status => :unprocessable_entity }
-       else
-         flash[:notice] = 'Topic was successfully created.'
-         format.html { redirect_to(forum_topic_path(@forum, @topic)) }
-         format.xml { render :xml => @topic, :status => :created, :location => forum_topic_url(@forum, @topic) }
-       end
-     end
+    @topic = @forum.topics.build(params[:topic])
+    @topic.user = current_user
+    
+    respond_to do |format|
+      if @topic.save
+        @post = @topic.posts.build(params[:post])
+        @post.user = current_user
+        if @post.save
+          flash[:notice] = "Topic and post successfuly created"
+          format.html { redirect_to(forum_topic_path(@forum, @topic)) }
+          format.xml { render :xml => @topic, :status => :created, :location => forum_topic_url(@forum, @topic) }
+        else
+          flash[:error] = "Post creation unsuccessful: #{@post.errors.full_messages}"
+          format.html { render :action => "new" }
+          format.xml { render :xml => @post.errors, :status => :unprocessable_entity }
+        end
+      else
+        flash[:error] = "Topic creation unsuccessful: #{@topic.errors.full_messages}"
+        format.html { render :action => "new" }
+        format.xml { render :xml => @topic.errors, :status => :unprocessable_entity }
+      end
+    end
   end
 
   def update

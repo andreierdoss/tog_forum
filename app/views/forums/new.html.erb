@@ -1,4 +1,4 @@
-<div class="titleB"><%= link_to "TogForum", forums_path %> / Compose a new forum</div>
+<div class="titleB"><%= link_to config["plugins.tog_forum.header"], forums_path %> / Create a new forum</div>
 <br/>
 <%= error_messages_for :forum %>
 <% form_for :forum, :url => forums_path  do |f| %>
