@@ -17,6 +17,7 @@ class ForumsController < ApplicationController
 
   def show
     @page = params[:page] || '1'
+    @forum = Forum.find(:first) unless @forum
     
     @topics = @forum.topics.paginate :per_page => 10,
                                      :page => @page,
