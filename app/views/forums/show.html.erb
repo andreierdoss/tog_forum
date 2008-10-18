@@ -29,10 +29,15 @@
     <tbody>
     <% @topics.each do |topic| %>
       <tr<%= cycle(' class="pair"','') -%>>
-         <td><%= link_to topic.title, topic_path(:id => topic) %></td>
+         <td><%= link_to topic.title, forum_topic_url(:forum_id => @forum.id, :id => topic.id) %></td>
          <td><%= topic.posts.size %></td>
          <td><%= topic.updated_at.to_formatted_s(:db) %></td>
          <td><%= "rating" %></td>
+         <% if current_user and current_user.admin? %>
+          <td>
+            <%= link_to "[x]", forum_topic_url(:forum_id => @forum.id, :id => topic.id), :method => :delete %>
+          </td>
+         <% end %>
       </tr>
     <%end%>
   <% end %>

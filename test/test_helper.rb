@@ -3,6 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../../config/environme
 require 'test_help'
 require 'test/unit'
 
+require 'factory_girl'
+require File.expand_path(File.dirname(__FILE__) + '/factories')
 
 class Test::Unit::TestCase
   self.use_transactional_fixtures = true

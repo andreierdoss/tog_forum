@@ -8,4 +8,5 @@ class Topic < ActiveRecord::Base
   validates_associated :posts, :message => nil
   validates_length_of :title, :minimum => 4
   validates_presence_of :title, :forum_id, :user_id
+  validates_associated :user
 end

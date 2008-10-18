@@ -27,6 +27,13 @@
           <%= h post.body %>
         </td>
       </tr>
+      
+      <% if current_user and current_user.admin? %>
+        <tr><td>
+         <%= link_to "delete this post", forum_topic_post_url(:forum_id => @forum.id, :topic_id => @topic.id, :id => post.id), :method => :delete %>
+       </td></tr>
+      <% end %>
+      
     <%end%>
   <% end %>
   </tbody>

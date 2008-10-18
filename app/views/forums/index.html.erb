@@ -27,12 +27,17 @@
       </tr>
     </tfoot>
     <tbody>
-    <% @forums.each do |form| %>
+    <% @forums.each do |forum| %>
       <tr<%= cycle(' class="pair"','') -%>>
          <td><%= link_to forum.title, forum_path(:id => forum) %></td>
          <td><%= forum.topics.size %></td>
          <td><%= forum.updated_at.to_formatted_s(:db) %></td>
          <td><%= "rating" %></td>
+         <% if current_user and current_user.admin? %>
+          <td>
+            <%= link_to "[x]", forum_url(forum), :method => :delete %>
+          </td>
+         <% end %>
       </tr>
     <%end%>
     </tbody>

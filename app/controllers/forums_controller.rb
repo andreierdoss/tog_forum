@@ -4,7 +4,10 @@ class ForumsController < ApplicationController
   before_filter :find_forum, :only => [:show, :edit, :update, :destroy]
   
   def index
-    @forums = Forum.all
+    @page = params[:page] || '1'
+    @forums = Forum.all.paginate  :per_page => 10,
+                                  :page => @page,
+                                  :order => "created_at desc"
     
     respond_to do |format|
       format.html
@@ -43,7 +46,8 @@ class ForumsController < ApplicationController
   
   def create
     @forum = Forum.new(params[:forum])
- 
+    @forum.user = current_user
+
     respond_to do |format|
       if @forum.save
         flash[:notice] = 'Forum was successfully created.'
