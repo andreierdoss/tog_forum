@@ -7,3 +7,8 @@ Factory.define :user do |u|
   u.admin {|a| a.admin }
 end
 
+Factory.define :forum do |f|
+  f.created_at Time.now.to_formatted_s(:db)
+  f.updated_at Time.now.to_formatted_s(:db)
+end
+
