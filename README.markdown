@@ -1,7 +1,8 @@
-Tog Forum
+Tog Forum: a work in progress
 ========
 
-Tog forums support
+Tog forums support: not ready for prime time! 
+I started working on this but it is not yet complete. I realize that the model Post conflicts with a Post model in tog_conversatio. I'll fix it when I can, but in the meantime, if you really need it fixed, you can always fork this project :)
 
 Included functionality
 -----------------------
