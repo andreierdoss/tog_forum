@@ -1,21 +1,22 @@
 class CreateTogForumTables < ActiveRecord::Migration
   def self.up
-    create_table :forums do |t|
+    create_table :tog_forum_forums do |t|
       t.string   :title
       t.integer  :user_id
       t.timestamps
     end
     
-    create_table :topics do |t|
+    create_table :tog_forum_topics do |t|
       t.integer  :forum_id
       t.integer  :user_id
-      t.text     :title
+      t.string   :title
+      t.text     :body
       t.datetime :last_post_at
       t.integer  :last_post_by
       t.timestamps
     end
     
-    create_table :posts do |t|
+    create_table :tog_forum_posts do |t|
       t.integer  :topic_id
       t.integer  :user_id
       t.text     :body
@@ -25,8 +26,8 @@ class CreateTogForumTables < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :forums
-    drop_table :topics
-    drop_table :posts
+    drop_table :tog_forum_forums
+    drop_table :tog_forum_topics
+    drop_table :tog_forum_posts
   end
 end

@@ -1,0 +1,15 @@
+<a name="post_<%= post.id %>"></a>
+<tr class="pair">
+  <td width="50%"><%= link_to post.user_login, profile_path(post.poster_profile) %></td>
+  <td width="50%" align="right">
+    <%= post.updated_at.to_formatted_s(:forums) %>
+    <% if admin? %>
+      <%= link_to "[delete post]", forum_topic_post_url(:forum_id => @forum.id, :topic_id => @topic.id, :id => post.id), :method => :delete, :confirm => "Are you sure?" %>
+    <% end %>
+  </td>
+</tr>
+<tr>
+  <td colspan="2">
+    <%= white_list post.body %>
+  </td>
+</tr>

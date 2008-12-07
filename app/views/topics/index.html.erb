@@ -7,12 +7,15 @@
       <th scope="col">posts</th>
       <th scope="col">last post</th>
       <th scope="col">rating</th>
+      <% if admin? %>
+        <th scope="col">x</th>
+      <% end %>
     </tr>
   </thead>
   <tfoot>
     <tr>
       <td colspan="4" class="info_results">
-        <span class="info_items"><%= page_entries_info @topics %></span>
+        <span class="info_items"><%= page_entries_info @topics, :entry_name => "topic" %></span>
         <span class="pages_navigation right">
           <%= will_paginate @topics, :container => false %>
         </span>
@@ -22,10 +25,14 @@
   <tbody>
   <% @topics.each do |topic| %>
     <tr<%= cycle(' class="pair"','') -%>>
-       <td><%= link_to topic.title, topic_path(:id => topic) %></td>
+       <td><%= link_to white_list(topic.title), topic_path(:id => topic) %></td>
        <td><%= topic.posts.size %></td>
        <td><%= topic.updated_at.to_formatted_s(:db) %></td>
        <td><%= "rating" %></td>
+       <% if admin? %>
+         <td><%= link_to image_tag('/images/icons/delete.png'), forum_topic_url(:forum_id => @forum.id, :id => topic.id), :confirm => "Are you sure?", :method => :delete %></td>
+       <% end %>
+       
     </tr>
   <%end%>
   <% if @topics.blank? %>

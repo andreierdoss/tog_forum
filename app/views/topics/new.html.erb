@@ -1,23 +1,15 @@
-<div class="titleB"><%= link_to config["plugins.tog_forum.header"], forums_url %> / Add a topic</div>
-<br/>
-<%= error_messages_for :topic %>
-<% form_for :topic, :url => forum_topics_url(@forum)  do |f| %>
-  <fieldset>
-    <div class="fields">
-      <p>
-        <label for="title">Title</label>
-        <%= f.text_field :title, :class => "fieldbox wide" %>
-      </p>
-      
-      <% fields_for @topic.posts.build do |p| %>
-        <p>
-          <label for="title">Body</label>
-          <%= p.text_area :body, :class => "fieldbox wide" %>
-        </p>
+<div class="portlet portletB" id="add_topic">
+  <h2><span><%=h @forum.title %>: Add Topic</span></h2>
+  <div class="detail detail1" style="clear: both; width: 100%;">
+    <div id="portlet_addTopicDetails">
+      <%= error_messages_for :topic %>
+      <% form_for :topic, :url => forum_topics_url(@forum)  do |f| %>
+        <dl class="alignright">
+          <%= render :partial => "/topics/partials/form", :locals => { :f => f } %>
+          <dt></dt>
+          <dd><%= submit_tag 'post message', {:class=>"button mainaction"} %></dd>
+        </dl>
       <% end %>
     </div>
-  </fieldset>
-  <div class="actions">
-    <%= submit_tag 'Save topic', :class => "button mainaction" %>
   </div>
-<% end %>
+</div>

@@ -1,45 +1,42 @@
-<h2><%= config["plugins.tog_forum.header"] %></h2>
-
-<%= link_to "create a forum", new_forum_url if current_user and current_user.admin? %>
-  
-<table class="tableB">
-  <thead>
-    <tr>
-      <th scope="col">title</th>
-      <th scope="col">topics</th>
-      <th scope="col">last post</th>
-      <th scope="col">rating</th>
-    </tr>
-  </thead>
-  <% if @forums.blank? %>
-    <tr>
-       <td colspan="4">No forums.</td>
-    </tr>
-  <% else %>
-    <tfoot>
-      <tr>
-        <td colspan="4" class="info_results">
-          <span class="info_items"><%= page_entries_info @forums %></span>
-          <span class="pages_navigation right">
-            <%= will_paginate @forums, :container => false %>
-          </span>
-        </td>
-      </tr>
-    </tfoot>
-    <tbody>
-    <% @forums.each do |forum| %>
-      <tr<%= cycle(' class="pair"','') -%>>
-         <td><%= link_to forum.title, forum_path(:id => forum) %></td>
-         <td><%= forum.topics.size %></td>
-         <td><%= forum.updated_at.to_formatted_s(:db) %></td>
-         <td><%= "rating" %></td>
-         <% if current_user and current_user.admin? %>
-          <td>
-            <%= link_to "[x]", forum_url(forum), :method => :delete %>
-          </td>
-         <% end %>
-      </tr>
-    <%end%>
-    </tbody>
-  <% end %>
-</table>
+<div class="portlet portletB" id="photos_list">
+  <h2 class="clearfix"><span style="float: right; width: 10%;"><%= link_to "add", new_forum_path %></span><span style="float: right; width: 90%;"><%= config["plugins.tog_forum.header"] %></span></h2>
+  <div class="portlet_content">
+    <table class="tableB">
+      <thead>
+        <tr>
+          <th scope="col">title</th>
+          <th scope="col">topics</th>
+          <th scope="col">last post</th>
+          <th scope="col">rating</th>
+        </tr>
+      </thead>
+      <% if @forums.blank? %>
+        <tr>
+           <td colspan="4">No forums.</td>
+        </tr>
+      <% else %>
+        <tfoot>
+          <tr>
+            <td colspan="4" class="info_results">
+              <span class="info_items"><%= page_entries_info @forums %></span>
+              <span class="pages_navigation right">
+                <%= will_paginate @forums, :container => false %>
+              </span>
+            </td>
+          </tr>
+        </tfoot>
+        <tbody>
+        <% @forums.each do |forum| %>
+          <tr<%= cycle(' class="pair"','') -%>>
+             <td><%= link_to white_list(forum.title), forum_path(:id => forum) %></td>
+             <td><%= forum.topics.size %></td>
+             <td><%= forum.updated_at.to_formatted_s(:db) %></td>
+             <td><%= "" %></td>
+             <td><%= link_to image_tag('/images/icons/delete.png'), forum_url(forum), :confirm => "Are you sure?", :method => :delete %></td>
+          </tr>
+        <%end%>
+        </tbody>
+      <% end %>
+    </table>
+  </div>    
+</div>

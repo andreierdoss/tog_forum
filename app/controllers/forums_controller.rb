@@ -9,16 +9,16 @@ class ForumsController < ApplicationController
     if admin?
       index_for_admin
     else
-      @forum = Forum.find_top_level
+      @forum = TogForum::Forum.top_level
+      @topics = @forum.topics.paginate(:all, {:order => "current_rating DESC", :page => options[:page] || 1, :per_page => options[:per_page] || 10}) rescue []
+      
       render :action => "show"
     end
   end
   
   def index_for_admin
     @page = params[:page] || '1'
-    @forums = Forum.all.paginate  :per_page => 10,
-                                  :page => @page,
-                                  :order => "created_at desc"
+    @forums = TogForum::Forum.all.paginate({:page => @page})
     respond_to do |format|
       format.html
       format.rss { render :rss => @forums }    
@@ -28,16 +28,20 @@ class ForumsController < ApplicationController
   # GET /forums/1
   # GET /forums/1.xml
   def show
+    @order = params[:order] || 'tog_forum_topics.current_rating'
+
     @page = params[:page] || '1'
-    @forum = Forum.find(:first) unless @forum
-    
-    @topics = @forum.topics.paginate :per_page => 10,
-                                     :page => @page,
-                                     :order => "created_at desc"
-    
+    @asc = (params[:asc] and params[:asc] == "desc") ? "asc" : 'desc'
+
+    @forum = TogForum::Forum.top_level
+    @topics = TogForum::Topic.paginate :per_page => Tog::Config["plugins.tog_social.profile.list.page.size"],
+                                       :page => @page,
+                                       :conditions => ['tog_forum_topics.forum_id = ?', @forum.id],
+                                       :order => @order + " " + @asc
     
     respond_to do |format|
-      format.html # show.html.erb
+      format.js { render :partial => "/forums/partials/topics_paginated" }
+      format.html
       format.rss { render :rss => @forum }
     end
   end
@@ -45,7 +49,7 @@ class ForumsController < ApplicationController
   # GET /forums/new
   # GET /forums/new.xml
   def new
-    @forum = Forum.new
+    @forum = TogForum::Forum.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -64,7 +68,7 @@ class ForumsController < ApplicationController
   # POST /forums
   # POST /forums.xml
   def create
-    @forum = Forum.new(params[:forum])
+    @forum = TogForum::Forum.new(params[:forum])
     @forum.user = current_user
 
     respond_to do |format|
@@ -97,9 +101,14 @@ class ForumsController < ApplicationController
   # DELETE /forums/1
   # DELETE /forums/1.xml
   def destroy
-    @forum = Forum.find(params[:id])
-    @forum.destroy
+    @forum = TogForum::Forum.find(params[:id])
 
+    if @forum.destroy
+      flash[:notice] = "The forum was successfully deleted."
+    else
+      flash[:error] = "An error occurred: #{@forum.errors.full_messages}"
+    end
+    
     respond_to do |format|
       format.html { redirect_to(forums_url) }
       format.xml  { head :ok }
@@ -108,6 +117,9 @@ class ForumsController < ApplicationController
 
 private
   def find_forum
-    @forum = Forum.find(params[:id]) if params[:id]
+    @forum = TogForum::Forum.find_by_id(params[:id]) || TogForum::Forum.top_level
+    if @forum.blank? and Tog::Config["plugins.tog_forum.ensure_top_level"]
+      @forum = TogForum::Forum.create_top_level
+    end
   end
 end

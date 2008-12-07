@@ -1,40 +1,49 @@
-<h2><%= @forum.title %> :: <%= @topic.title %> :: Posts</h2>
-<br />
-<table class="tableB">
-  <% if @posts.blank? %>
-    <tr>
-       <td colspan="2">No posts found!</td>
-    </tr>
-  <% else %>
-    <tfoot>
-      <tr>
-        <td colspan="2" class="info_results">
-          <span class="info_items"><%= page_entries_info @posts %></span>
-          <span class="pages_navigation right">
-            <%= will_paginate @posts, :container => false %>
-          </span>
-        </td>
-      </tr>
-    </tfoot>
-    <tbody>
-    <% @posts.each do |post| %>
-      <tr class="pair">
-        <td width="50%"><%= link_to post.user.login, user_url(post.user) %></td>
-        <td width="50%"><%= post.updated_at.to_formatted_s(:db) %></td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <%= h post.body %>
-        </td>
-      </tr>
-      
-      <% if current_user and current_user.admin? %>
-        <tr><td>
-         <%= link_to "delete this post", forum_topic_post_url(:forum_id => @forum.id, :topic_id => @topic.id, :id => post.id), :method => :delete %>
-       </td></tr>
+<div class="portlet portletB clearfix" id="topic_posts_list">
+  <h2><span><%= @forum.title %>: <%= white_list @topic.title %></span></h2>
+  <div class="detail detail1" style="clear: both; width: 100%;">
+    <div>
+      <div id="ratings_graph_box" class="clearfix" style="margin-bottom: 20px;">
+        <%= render :partial => "/home/partials/ratings_graph", :locals => {:voteable => @topic} %>
+      </div>
+
+      <%= render :partial => "/topics/partials/original_topic", :object => @topic %>
+      <br />
+
+      <%= render :partial => "/topics/partials/highlighted_post", :object => @highlighted_post unless @highlighted_post.blank? %>
+      <br />
+
+      <table class="tableB">
+        <% if @posts.blank? %>
+          <tr>
+             <td colspan="2">No replies found!</td>
+          </tr>
+        <% else %>
+          <tfoot>
+            <tr>
+              <td colspan="2" class="info_results">
+                <span class="info_items"><%= page_entries_info @posts, :entry_name => "post" %></span>
+                <span class="pages_navigation right">
+                  <%= will_paginate @posts, :container => false %>
+                </span>
+              </td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <%= render :partial => "/topics/partials/post", :collection => @posts %>
+          </tbody>
+        <% end %>
+      </table>
+
+      <% if current_user %>
+        <% form_for :post, :url => {:controller=>"posts", :action=>"create", :forum_id => @forum, :topic_id => @topic } do |f| %>
+          <dl class="alignright">
+            <%= render :partial => "/topics/partials/form", :locals => { :f => f } %>
+            <dt></dt>
+            <dd><%= submit_tag 'post message', {:class=>"button mainaction"} %></dd>
+          </dl>
+        <% end %>
+          
       <% end %>
-      
-    <%end%>
-  <% end %>
-  </tbody>
-</table>
+    </div>
+  </div>
+</div>

@@ -1,69 +1,107 @@
 require File.dirname(__FILE__) + '/../test_helper'
-
 require File.dirname(__FILE__) + '/../../../tog_user/lib/authenticated_test_helper'
+
 class ForumsControllerTest < ActionController::TestCase
   include AuthenticatedTestHelper
+
   def setup
     @admin_user = Factory(:user, :login => 'admin_user', :admin => true)
     @normal_user = Factory(:user, :login => 'normal_user', :admin => false)
     @forum_top_level = Factory(:forum, :title => "Main Discussion Forum", :user => @admin_user)
   end
-    
-  def test_should_get_index_for_admin
-    login_as @admin_user
-    get :index
-    assert_response :success
-    assert_not_nil assigns(:forums)
+
+  context "on GET to :index as admin" do
+    setup do
+      login_as @admin_user
+      get :index
+    end
+
+    should_assign_to :forums
+    should_respond_with :success
+    should_render_template :index
+    should_not_set_the_flash
+  end
+  
+  context "on GET to :index as normal user" do
+    setup do
+      login_as @normal_user
+      get :index
+    end
+
+    should_assign_to :forum
+    should_assign_to :topics
+    should_respond_with :success
+    should_render_template :show
+    should_not_set_the_flash
   end
 
-  def test_should_get_index_for_normal_user
-    login_as @normal_user
-    get :index
-    assert_response :success
-    assert_not_nil assigns(:forum)
-    assert_template "show"
+  context "on GET to :new as admin" do
+    setup do
+      login_as @admin_user
+      get :new
+    end
+
+    should_assign_to :forum
+    should_respond_with :success
+    should_render_template :new
+    should_render_a_form
+    should_not_set_the_flash
   end
 
-  def test_should_get_new
-    login_as @admin_user
-    get :new
-    assert_response :success
+  context "on GET to :show as admin" do
+    setup do
+      login_as @admin_user
+      get :show, :id => @forum_top_level.id
+    end
+
+    should_assign_to :forum
+    should_respond_with :success
+    should_render_template :"_topics_paginated"
+    should_not_set_the_flash
+  end
+  
+  context "on GET to :edit as admin" do
+    setup do
+      login_as @admin_user
+      get :edit, :id => @forum_top_level.id
+    end
+
+    should_assign_to :forum
+    should_respond_with :success
+    should_render_template :edit
+    should_not_set_the_flash
   end
 
-  def test_should_create_forums
-    login_as @admin_user
-    
-    assert_difference(Forum, :count) do
+  context "on POST to :create as admin" do
+    setup do
+      login_as @admin_user
       post :create, :forum => { :title => "New Forum Title" }
     end
 
-    assert_redirected_to forum_path(assigns(:forum))
+    should_assign_to :forum
+    should_redirect_to "forum_url(@forum)" 
+    should_set_the_flash_to(/created/i)
+  end
+  
+  context "on PUT to :update as admin" do
+    setup do
+      login_as @admin_user
+      put :update, :id => @forum_top_level.id, :forum => { :title => "Updated Forum Title" }
+    end
+
+    should_assign_to :forum
+    should_redirect_to "forum_url(@forum)" 
+    should_set_the_flash_to(/updated/i)
   end
 
-  def test_should_show_forums
-    login_as @admin_user
-    get :show, :id => @forum_top_level.id
-    assert_response :success
-  end
-
-  def test_should_get_edit
-    login_as @admin_user
-    get :edit, :id => @forum_top_level.id
-    assert_response :success
-  end
-
-  def test_should_update_forums
-    login_as @admin_user
-    put :update, :id => @forum_top_level.id, :forum => { }
-    assert_redirected_to forum_path(assigns(:forum))
-  end
-
-  def test_should_destroy_forums
-    login_as @admin_user
-    assert_difference(Forum, :count, -1) do
+  context "on DELETE to :destroy as admin" do
+    setup do
+      login_as @admin_user
       delete :destroy, :id => @forum_top_level.id
     end
 
-    assert_redirected_to forums_path
+    should_assign_to :forum
+    should_redirect_to "forums_url" 
+    should_set_the_flash_to(/deleted/i)
   end
 end
