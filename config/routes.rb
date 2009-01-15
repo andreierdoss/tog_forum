@@ -6,3 +6,7 @@ resources :forums do |forum|
     topic.resources :posts, :member => { :vote_for => :post, :vote_against => :post }
   end
 end
+
+namespace(:admin) do |admin|
+  admin.resources :forums
+end

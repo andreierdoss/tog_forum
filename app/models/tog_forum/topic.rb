@@ -2,6 +2,8 @@ module TogForum
   class Topic < ActiveRecord::Base    
     set_table_name "tog_forum_topics"
     
+    white_list :only => [ :title, :body ]
+    
     belongs_to :user
     belongs_to :forum, :class_name => "TogForum::Forum"
     has_many :posts, :class_name => "TogForum::Post", :dependent => :destroy, :order => "tog_forum_posts.updated_at asc"

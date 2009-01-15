@@ -2,7 +2,8 @@
 <tr class="pair">
   <td width="50%"><%= link_to post.user.login, profile_path(post.poster_profile) %></td>
   <td width="50%" align="right">
-    <%= I18n.l(post.updated_at, :format => :long) %>
+    <%= post.updated_at.to_formatted_s(:forums) %>
+      <%= link_to "[delete post]", forum_topic_post_url(:forum_id => @forum.id, :topic_id => @topic.id, :id => post.id), :method => :delete, :confirm => "Are you sure?" %>
   </td>
 </tr>
 <tr>

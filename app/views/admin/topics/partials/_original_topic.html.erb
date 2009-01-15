@@ -1,0 +1,17 @@
+<table class="tableB">
+  <thead>
+    <tr class="pair original_message">
+      <th width="50%">
+        originally posted by <%= link_to original_topic.user.login, profile_path(original_topic.poster_profile) %> on <%= original_topic.created_at.to_formatted_s(:forums) %>
+      </th>
+      <th width="50%" align="right" style="text-align: right;">
+        <%= link_to "[delete topic]", forum_topic_url(:forum_id => @forum.id, :topic_id => @topic.id), :method => :delete, :confirm => "This will delete the entire topic - are you sure?" %>
+      </th>
+    </tr>
+  </thead>
+  <tr>
+    <td colspan="2">
+      <%= original_topic.body %>
+    </td>
+  </tr>
+</table>

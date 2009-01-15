@@ -1,0 +1,16 @@
+en:
+  tog_forum:
+    plugin_title: Forums
+    site:
+      no_forums: No forums yet.
+    admin:
+      create_forum: Create forum
+      forum_details: Forum details
+      save: Save
+      edit: Edit
+      delete: Delete
+      delete_confirmation: Are you sure you want to remove this forum?
+    model:
+      title: Title
+      topics: Topics
+      last_post: Last post

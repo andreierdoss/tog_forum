@@ -2,6 +2,8 @@ module TogForum
   class Forum < ActiveRecord::Base    
     set_table_name "tog_forum_forums"
     
+    white_list :only => [ :title ]
+    
     belongs_to :user
     has_many :topics, :class_name => "TogForum::Topic", :order => "created_at DESC", :dependent => :destroy
     has_many :posts, :through => :topics, :source => :posts, :order => "created_at DESC"

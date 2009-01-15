@@ -18,7 +18,8 @@ Resources
 Plugin requirements
 -------------------
 * tog_user
-* will_paginate
+* will_paginate (as gem)
+* white_list_model
 
 
 Install

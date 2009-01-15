@@ -1,0 +1,37 @@
+<h1><%= I18n.t('tog_forum.plugin_title') %></h1>
+
+<p><%= link_to I18n.t('tog_forum.admin.create_forum'),  new_admin_forum_url, {:class => "button add", :title => I18n.t('tog_forum.admin.create_forum')} %></p>
+
+
+<table class="tableE">
+  <thead>
+    <tr>
+      <th scope="col"><%= I18n.t("tog_forum.model.title") -%></th>
+      <th scope="col"><%= I18n.t("tog_forum.model.topics") -%></th>
+      <th scope="col"><%= I18n.t("tog_forum.model.last_post") -%></th>      
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td colspan="5" class="info_results">
+        <span class="info_items"><%= page_entries_info @forums %></span>
+        <span class="pages_navigation right">
+          <%= will_paginate @forums, :container => false %>
+        </span>
+        </td>
+    </tr>
+  </tfoot>  
+  <tbody>
+    <% @forums.each do |forum| %>
+    <tr<%= cycle('',' class="pair"') -%>>
+      <td><%= link_to forum.title, admin_forum_path(forum) %></td>
+      <td><%= forum.topics.size %></td>
+      <td><%= I18n.l(forum.updated_at, :format => :long) %></td>
+      <td><%= link_to I18n.t('tog_forum.admin.edit'), edit_admin_forum_url(forum), :class => 'button' %></td>
+      <td><%= link_to I18n.t('tog_forum.admin.delete'), admin_forum_url(forum), :confirm => I18n.t('tog_forum.admin.delete_confirmation'), :method => :delete, :class => 'button delete' %></td>    
+    </tr>
+    <% end %>
+  </tbody>
+</table>

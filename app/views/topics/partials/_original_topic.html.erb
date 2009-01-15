@@ -1,19 +1,14 @@
 <table class="tableB">
   <thead>
     <tr class="pair original_message">
-      <th<%= " width='50%'" if admin? %>>
-        originally posted by <%= link_to original_topic.user.login, profile_path(original_topic.poster_profile) %> on <%= original_topic.created_at.to_formatted_s(:forums) %>
+      <th>
+        originally posted by <%= link_to original_topic.user.login, profile_path(original_topic.poster_profile) %> on <%= I18n.l(original_topic.created_at, :format => :long) %>
       </th>
-      <% if admin? %>
-        <th width="50%" align="right" style="text-align: right;">
-          <%= link_to "[delete topic]", forum_topic_url(:forum_id => @forum.id, :topic_id => @topic.id), :method => :delete, :confirm => "This will delete the entire topic - are you sure?" %>
-        </th>
-      <% end %>
     </tr>
   </thead>
   <tr>
-    <td<%= " colspan='2'" if admin? %>>
-      <%= white_list original_topic.body %>
+    <td>
+      <%= original_topic.body %>
     </td>
   </tr>
 </table>
