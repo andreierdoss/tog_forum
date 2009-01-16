@@ -1,6 +1,10 @@
-<% unless f.object_name == :post %>
-  <dt><label for="mail_name">Title:</label></dt>
-  <dd><%= f.text_field :title, {:class => "textfield required wide", :style => "width: 398px;"}  %></dd>
-<% end %>
-<dt><label for="mail_name">Body:</label></dt>
-<dd><%= f.text_area :body, {:rows => 5, :class => "textfield required wide", :style => "width: 398px;"}  %></dd>
+<div class="fields">
+  <p>
+    <label for="forum_topic_title">Title</label>
+    <%= f.text_field :title, :class=>"fieldbox", :size => 35 %>
+  </p>
+  <p>
+    <label for="forum_topic_body">Body</label>
+    <%= f.text_area :body, :class => 'fieldbox', :size => '60x10' %>
+  </p>
+</div>

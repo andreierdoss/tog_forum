@@ -1,9 +1,11 @@
+<h2 class="clearfix"><span>Forum <%= link_to @forum.title, forum_path(@forum) %>: <%= @topic.title %></span></h2>
+
+
 <div class="portlet portletB clearfix" id="topic_posts_list">
-  <h2><span><%= link_to @forum.title, forum_path(@forum) %>: <%= @topic.title %></span></h2>
   <div class="detail detail1" style="clear: both; width: 100%;">
     <div>
       <div id="ratings_graph_box" class="clearfix" style="margin-bottom: 20px;">
-        <%= 'render :partial => "/home/partials/ratings_graph", :locals => {:voteable => @topic}' %>
+        <!-- #TODO add rating support again -->
       </div>
 
       <%= render :partial => "/topics/partials/original_topic", :object => @topic %>
@@ -11,6 +13,9 @@
 
       <%= render :partial => "/topics/partials/highlighted_post", :object => @highlighted_post unless @highlighted_post.blank? %>
       <br />
+      
+      <h3>Replies</h3>
+      
 
       <table class="tableB">
         <% if @posts.blank? %>
@@ -34,15 +39,19 @@
         <% end %>
       </table>
 
+      <h3>Add your reply!</h3>
+
       <% if logged_in? %>
         <% form_for :post, :url => {:controller=>"posts", :action=>"create", :forum_id => @forum, :topic_id => @topic } do |f| %>
-          <dl class="alignright">
-            <%= render :partial => "/topics/partials/form", :locals => { :f => f } %>
-            <dt></dt>
-            <dd><%= submit_tag 'post message', {:class=>"button mainaction"} %></dd>
-          </dl>
+            <p>
+              <%= f.text_area :body, :class => 'fieldbox', :size => '90x10' %>
+            </p>            
+          <div class="actions">
+            <%= submit_tag 'post message', {:class=>"button mainaction"} %>
+          </div>
         <% end %>
-          
+      <% else %>
+        Only registered users can add post to this forum.
       <% end %>
     </div>
   </div>

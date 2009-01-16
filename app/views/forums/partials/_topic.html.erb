@@ -3,5 +3,4 @@
   <td><%= topic.posts_count %></td>
   <td><%= link_to topic.user.login, profile_url(topic.user) %></td>
   <td><%= I18n.l(topic.updated_at, :format => :long) %></td>
-  <td><%= 'topic.rating_percent' %></td>
 </tr>
