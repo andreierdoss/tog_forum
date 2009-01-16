@@ -24,7 +24,7 @@ class TopicsController < ApplicationController
   def show
     @page = params[:page] || '1'
     @highlighted_post = @topic.posts.find(params[:post_id]) if params[:post_id]
-    @posts = @topic.posts.paginate :per_page => 10, :page => @page, :order => "updated_at DESC"
+    @posts = @topic.posts.paginate :per_page => 10, :page => @page, :order => "updated_at ASC"
     @post = @topic.posts.build(:user => current_user)
 
     respond_to do |format|
@@ -54,7 +54,7 @@ class TopicsController < ApplicationController
           @post.user = current_user
           
           if @post and @post.valid? and @post.save
-            flash[:notice] = "Topic and post successfuly created"
+            flash[:ok] = "Topic and post successfuly created"
             format.html { redirect_to forum_topic_path(@forum, @topic) }
             format.xml { render :xml => @topic, :status => :created, :location => forum_topic_url(@forum, @topic) }
           else
@@ -63,7 +63,7 @@ class TopicsController < ApplicationController
             format.xml { render :xml => @post.errors, :status => :unprocessable_entity }
           end
         else
-          flash[:notice] = "Topic successfully created"
+          flash[:ok] = "Topic successfully created"
           format.html { redirect_to forum_topic_path(@forum, @topic) }
           format.xml { render :xml => @topic, :status => :created, :location => forum_topic_url(@forum, @topic) }
         end
@@ -82,7 +82,7 @@ class TopicsController < ApplicationController
     @topic.update_attributes(params[:topic]) if user_can_alter?
     respond_to do |format|
       if @topic.errors.empty? and user_can_alter?
-        flash[:notice] = 'Topic was successfully updated.'
+        flash[:ok] = 'Topic was successfully updated.'
         format.html { redirect_to forum_topic_path(@forum, @topic) }
         format.xml { head :ok }
       elsif not user_can_alter?
@@ -100,7 +100,7 @@ class TopicsController < ApplicationController
   def destroy
     respond_to do |format|
       if @topic.destroy
-        flash[:notice] = "You have deleted the topic id ##{@topic.id}"
+        flash[:ok] = "You have deleted the topic id ##{@topic.id}"
       else
         flash[:error] = "An error occurred while trying to delete topic id ##{@topic.id}: #{@topic.errors.full_messages}"
       end

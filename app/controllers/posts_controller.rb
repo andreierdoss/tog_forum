@@ -31,7 +31,7 @@ class PostsController < ApplicationController
     
     respond_to do |format|
       if @post.save
-        flash[:notice] = "Post successfuly created"
+        flash[:ok] = "Post successfuly created"
         format.html { redirect_to(forum_topic_path(@topic.forum, @topic)) }
         format.xml { render :xml => @topic, :status => :created, :location => forum_topic_url(@topic.forum, @topic) }
       else
@@ -45,7 +45,7 @@ class PostsController < ApplicationController
   def destroy
     respond_to do |format|
       if @post.destroy
-        flash[:notice] = "You have deleted the post id ##{@post.id}"
+        flash[:ok] = "You have deleted the post id ##{@post.id}"
       else
         flash[:error] = "An error occurred while trying to delete post id ##{@post.id}: #{@post.errors.full_messages}"
       end

@@ -29,7 +29,6 @@ class ForumsController < ApplicationController
     @page = params[:page] || '1'
     @asc = (params[:asc] and params[:asc] == "desc") ? "asc" : 'desc'
 
-    @forum = TogForum::Forum.top_level
     @topics = TogForum::Topic.paginate :per_page => Tog::Config["plugins.tog_forum.topics.list.page.size"],
                                        :page => @page,
                                        :conditions => ['tog_forum_topics.forum_id = ?', @forum.id],
