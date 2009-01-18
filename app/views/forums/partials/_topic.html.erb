@@ -1,6 +1,6 @@
 <tr>
   <td><%= link_to topic.title, forum_topic_url(:forum_id => @forum.id, :id => topic.id) %></td>
   <td><%= topic.posts_count %></td>
-  <td><%= link_to topic.user.login, profile_url(topic.user) %></td>
+  <td><%= link_to topic.user.profile.full_name, profile_url(topic.user.profile) %></td>
   <td><%= I18n.l(topic.updated_at, :format => :long) %></td>
 </tr>
