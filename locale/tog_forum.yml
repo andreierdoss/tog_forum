@@ -1,4 +1,9 @@
 en:
+  interface:
+    admin:
+      forums: Forums
+    site:
+      forums: Forums
   tog_forum:
     plugin_title: Forums
     site:
